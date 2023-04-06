@@ -56,14 +56,10 @@ void destroy_entity(int id) {
 
     if (index == -1) return;
     clear_entry(index);
-    for (size_t i = index + 1; i < MAX_ENTITIES; ++i) {
-        // end of the collection of entities, delete trailing entry
-        if (_entities[i].id == -1) {
-            clear_entry(i - 1);
-            return;
-        }
-
-        memcpy(&_entities[i - 1], &_entities[i], sizeof(Entity));
+    // shuffle entities down the list
+    for (size_t i = index; i < _entity_count; ++i) {
+        memcpy(&_entities[i], &_entities[i + 1], sizeof(Entity));
+        clear_entry(i + 1);
     }
 }
 

@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR) # 3.11+ for FetchContent
 
 #### compile_commands.json generation ####
 
@@ -24,8 +24,30 @@ set(PROJECT_INCLUDE_DIRS
 
 #### project libraries ####
 
-find_package(SDL2 REQUIRED)
-set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES} ${SDL2_LIBRARIES})
+set(RAYLIB_VERSION 4.2.0)
+find_package(raylib ${RAYLIB_VERSION} QUIET)
+if (NOT raylib_FOUND) # download raylib if not present
+  include(FetchContent)
+  FetchContent_Declare(
+    raylib
+    URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
+  )
+  FetchContent_GetProperties(raylib)
+  if (NOT raylib_POPULATED) # is raylib downloaded yet?
+    set(FETCHCONTENT_QUIET NO)
+    FetchContent_Populate(raylib)
+    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+    add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
+  endif()
+endif()
+
+set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES} raylib)
+if (APPLE)
+    set(PROJECT_LIBRARIES ${PROJECT_LIBRARIES}
+        "-framework IOKit"
+        "-framework Cocoa"
+        "-framework OpenGL")
+endif()
 
 #### targets ####
 
@@ -36,5 +58,7 @@ target_link_libraries       (${PROJECT_NAME} PUBLIC ${PROJECT_LIBRARIES})
 target_compile_definitions  (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_DEFINITIONS})
 target_compile_options      (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_OPTIONS})
 set_target_properties       (${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
+
 add_custom_target           (run COMMAND ${PROJECT_BINARY_DIR}/${PROJECT_NAME})
+add_custom_command          (TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/res" "${PROJECT_BINARY_DIR}/res")
 

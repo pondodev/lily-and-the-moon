@@ -3,11 +3,11 @@
 
 #define INHERIT_COMPONENT ComponentType type;
 
+#include <stdlib.h>
 #include <stdint.h>
 
-#include <SDL.h>
-
 #include "types.h"
+#include "../platform/texture_manager.h"
 
 typedef enum ComponentType {
     COMPONENT_position  = 0,
@@ -58,8 +58,8 @@ typedef struct RectComponent {
 typedef struct SpriteComponent {
     INHERIT_COMPONENT
 
-    Vec2         offset;
-    SDL_Texture* sprite;
+    Vec2             offset;
+    AbstractTexture* sprite;
 } SpriteComponent;
 
 typedef void (*TriggerCallback)(void);
@@ -136,7 +136,7 @@ static inline void destroy_component(Component* component) {
         case COMPONENT_position:
         case COMPONENT_render:
         case COMPONENT_rect:
-        case COMPONENT_sprite: // SDL_Texture freeing should be handled elsewhere
+        case COMPONENT_sprite: // you need to tell the platform when you wish to free a texture
         case COMPONENT_collision:
             break;
 

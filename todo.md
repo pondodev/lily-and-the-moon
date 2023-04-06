@@ -10,4 +10,7 @@
 - look into sqlite for save games (if needed)
 - maybe look into [concurrentqueue](https://github.com/cameron314/concurrentqueue)
     - setting up your own multi threading may be okay too, but first identify what needs it
+- set window flags so it can't be resized
+- look into SetConfigFlags()
+- look into raylib camera functionality
 

@@ -15,7 +15,7 @@ typedef struct Entity {
     Component* components[ENTITY_COMPONENT_COUNT_MAX];
 } Entity;
 
-void init_entity_manager();
+void init_entity_manager(void);
 Entity* create_entity(const char* name);
 void destroy_entity(int id);
 Entity* get_entity_array(size_t* count);

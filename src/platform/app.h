@@ -1,34 +1,33 @@
 #ifndef APP_H
 #define APP_H
 
-#include <stdio.h>
-#include <SDL.h>
+#include "raylib.h"
+
+#include "keymap.h"
+
+#include <stdlib.h>
+#include <time.h>
 
 // platform specific details in here. this should be the main area to
 // change when porting to a new platform
 
 // config (set in main.c)
-extern const size_t WINDOW_WIDTH;
-extern const size_t WINDOW_HEIGHT;
-extern const char*  WINDOW_TITLE;
+extern const size_t  WINDOW_WIDTH;
+extern const size_t  WINDOW_HEIGHT;
+extern const char*   WINDOW_TITLE;
+extern const uint8_t TARGET_FPS;
 
 // global state for the application
-typedef struct AppContext
-{
-    SDL_Window*     window;
-    SDL_Renderer*   renderer;
+typedef struct AppContext {
+    float delta_time;
+    Keymap keymap;
 } AppContext;
-
-AppContext context;
 
 // initialise engine before gameplay starts
 void init_platform(void);
 
-// print out errors held by the framework/os based on last operation
-void print_error(void);
-
 // run the main game loop
-void run(void);
+void run_app(void);
 
 // handle all events dependant on framework/platform here
 int poll_events(void);
