@@ -18,8 +18,10 @@ typedef struct Entity {
 void init_entity_manager(void);
 Entity* create_entity(const char* name);
 void destroy_entity(int id);
+void destroy_all_entities(void);
 Entity* get_entity_array(size_t* count);
 Entity* get_entity(size_t index);
+void add_component_to_entity(Entity* const entity, Component* const component);
 
 #endif
 

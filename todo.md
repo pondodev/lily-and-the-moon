@@ -1,16 +1,16 @@
 # TODO
-- create GameContext
-    - holds game state and game global vars
-    - should be entirely decoupled from app state
-    - app state will be used to process how the game receives inputs/is rendered
-- set up rendering
+
+## gameplay
+- create basic world
+    - single screen, entrances and exits, player can move between screens
+- look into raylib camera functionality
+
+## tech
+- look into rendering stuffs
     - opengl? metal? vulkan? moltenvk? look into what can be used
-- set up input polling
+    - will i want custom shaders?
 - look into [faudio](https://github.com/FNA-XNA/FAudio)
 - look into sqlite for save games (if needed)
 - maybe look into [concurrentqueue](https://github.com/cameron314/concurrentqueue)
     - setting up your own multi threading may be okay too, but first identify what needs it
-- set window flags so it can't be resized
-- look into SetConfigFlags()
-- look into raylib camera functionality
 

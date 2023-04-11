@@ -12,7 +12,7 @@ set_property    (GLOBAL PROPERTY USE_FOLDERS ON)
 set             (CMAKE_BUILD_TYPE Debug)
 set             (CMAKE_C_STANDARD 17)
 
-add_compile_options(-Wall -Wextra -pedantic)
+add_compile_options(-Wall -Wextra -pedantic -g)
 
 #### project files ####
 
@@ -58,6 +58,12 @@ target_link_libraries       (${PROJECT_NAME} PUBLIC ${PROJECT_LIBRARIES})
 target_compile_definitions  (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_DEFINITIONS})
 target_compile_options      (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_OPTIONS})
 set_target_properties       (${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
+
+if (APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        XCODE_GENERATE_SCHEME TRUE
+        XCODE_SCHEME_WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+endif()
 
 add_custom_target           (run COMMAND ${PROJECT_BINARY_DIR}/${PROJECT_NAME})
 add_custom_command          (TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/res" "${PROJECT_BINARY_DIR}/res")

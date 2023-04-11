@@ -1,5 +1,6 @@
 #include "app.h"
 
+#include "../helpers.h"
 #include "../game/game_manager.h"
 
 AppContext app_context;
@@ -8,12 +9,14 @@ Texture2D tex;
 
 void init_platform(void) {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+    SetWindowState(FLAG_VSYNC_HINT);
     SetTargetFPS(TARGET_FPS);
     init_keymap();
 
     app_context = (AppContext) {
         .delta_time = 0.f,
         .keymap = get_default_keymap(),
+        .exiting = 0,
     };
 
     tex = LoadTexture("res/test.png");
@@ -29,7 +32,12 @@ void run_app(void) {
 }
 
 int poll_events(void) {
-    if (WindowShouldClose()) return 0;
+    if (app_context.keymap.menu.pressed) { // TODO: temp
+        CloseWindow();
+        app_context.exiting = 1;
+    }
+
+    if (WindowShouldClose() || app_context.exiting) return 0;
 
     process_keymap(&app_context.keymap);
 
@@ -37,18 +45,14 @@ int poll_events(void) {
 }
 
 void render(void) {
-    BeginDrawing();
-
-    ClearBackground(RAYWHITE);
-    DrawRectangle(10, 10, 30, 30, BLACK);
-    DrawTexture(tex, 10, 50, WHITE);
-
-    EndDrawing();
+    defer(BeginDrawing(), EndDrawing()) {
+        ClearBackground(RAYWHITE);
+        DrawRectangle(10, 10, 30, 30, BLACK);
+        DrawTexture(tex, 10, 50, WHITE);
+    }
 }
 
-void cleanup(void) {
+void cleanup_platform(void) {
     UnloadTexture(tex);
-
-    CloseWindow();
 }
 

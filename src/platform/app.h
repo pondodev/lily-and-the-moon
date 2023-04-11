@@ -21,6 +21,7 @@ extern const uint8_t TARGET_FPS;
 typedef struct AppContext {
     float delta_time;
     Keymap keymap;
+    int exiting;
 } AppContext;
 
 // initialise engine before gameplay starts
@@ -36,7 +37,7 @@ int poll_events(void);
 void render(void);
 
 // called before application closes. cleanup resources, persist data
-void cleanup(void);
+void cleanup_platform(void);
 
 #endif
 
