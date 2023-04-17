@@ -24,6 +24,12 @@ typedef struct AppContext {
     int exiting;
 } AppContext;
 
+// important! call this before you try to interact with the game api at all!!
+void reload_game_lib(void);
+
+// check if the game library has been updated for hot reloading
+int is_game_lib_updated(void);
+
 // initialise engine before gameplay starts
 void init_platform(void);
 
