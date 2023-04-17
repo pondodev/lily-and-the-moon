@@ -1,9 +1,10 @@
 #include "app.h"
 
 #include "../helpers.h"
-#include "../game/game_manager.h"
+#include "../game/api/game_interface.h"
 
 AppContext app_context;
+const GameAPI* api = NULL;
 
 Texture2D tex;
 
@@ -19,6 +20,8 @@ void init_platform(void) {
         .exiting = 0,
     };
 
+    api = get_game_api();
+
     tex = LoadTexture("res/test.png");
 }
 
@@ -26,7 +29,7 @@ void run_app(void) {
     while (poll_events()) {
         app_context.delta_time = GetFrameTime();
 
-        update_game();
+        api->update_game();
         render();
     }
 }

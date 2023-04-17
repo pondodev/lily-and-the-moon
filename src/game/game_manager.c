@@ -2,6 +2,18 @@
 
 GameContext game_context;
 
+GameState get_game_state(void) {
+    GameState state;
+
+    state.entities = get_entity_array(&state.entity_count);
+
+    return state;
+}
+
+void set_game_state(GameState state) {
+    set_entity_array(state.entities, state.entity_count);
+}
+
 void init_game(void) {
     init_entity_manager();
 

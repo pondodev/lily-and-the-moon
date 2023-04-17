@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 #### project settings ####
 
 project         (lily-and-the-moon VERSION 0.1 LANGUAGES C)
+set             (GAME_NAME game)
 set_property    (GLOBAL PROPERTY USE_FOLDERS ON)
 set             (CMAKE_BUILD_TYPE Debug)
 set             (CMAKE_C_STANDARD 17)
@@ -16,11 +17,13 @@ add_compile_options(-Wall -Wextra -pedantic -g)
 
 #### project files ####
 
-file(GLOB_RECURSE PROJECT_SOURCES src/*.c)
+file(GLOB_RECURSE PLATFORM_SOURCES src/platform/*.c)
+file(GLOB_RECURSE GAME_SOURCES src/game/*.c)
 
-set(PROJECT_INCLUDE_DIRS
-    ${PROJECT_INCLUDE_DIRS}
-    src/)
+set(PROJECT_INCLUDE_DIRS src/)
+set(PLATFORM_INCLUDE_DIRS ${PROJECT_INCLUDE_DIRS} src/platform)
+set(GAME_API_HEADER src/game/api/game_interface.h)
+set(GAME_PRIVATE_INCLUDE_DIRS ${PROJECT_INCLUDE_DIRS} src/game)
 
 #### project libraries ####
 
@@ -51,10 +54,21 @@ endif()
 
 #### targets ####
 
-add_executable              (${PROJECT_NAME} ${PROJECT_SOURCES})
+# game
+add_library                 (${GAME_NAME} SHARED ${GAME_SOURCES})
+
+target_include_directories  (${GAME_NAME} PRIVATE ${GAME_PRIVATE_INCLUDE_DIRS})
+target_compile_definitions  (${GAME_NAME} PUBLIC ${PROJECT_COMPILE_DEFINITIONS})
+target_compile_options      (${GAME_NAME} PUBLIC ${PROJECT_COMPILE_OPTIONS})
+set_target_properties       (${GAME_NAME} PROPERTIES PUBLIC_HEADER ${GAME_API_HEADER})
+set_target_properties       (${GAME_NAME} PROPERTIES LINKER_LANGUAGE C)
+set_target_properties       (${GAME_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
+
+# platform
+add_executable              (${PROJECT_NAME} ${PLATFORM_SOURCES})
 
 target_include_directories  (${PROJECT_NAME} PUBLIC ${PROJECT_INCLUDE_DIRS})
-target_link_libraries       (${PROJECT_NAME} PUBLIC ${PROJECT_LIBRARIES})
+target_link_libraries       (${PROJECT_NAME} PUBLIC ${PROJECT_LIBRARIES} ${GAME_NAME})
 target_compile_definitions  (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_DEFINITIONS})
 target_compile_options      (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_OPTIONS})
 set_target_properties       (${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)

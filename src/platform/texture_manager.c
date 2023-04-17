@@ -8,8 +8,8 @@ static size_t          _texture_count = 0;
 
 static void clear_info(size_t index) {
     AbstractTexture* texture = &_textures[index];
-    memset(texture->alias, '\0', TEXTURE_ALIAS_MAX_LENGTH);
-    memset(texture->path, '\0', TEXTURE_PATH_MAX_LENGTH);
+
+    texture->generation = 0;
     texture->active = 0;
 }
 
@@ -19,28 +19,30 @@ void init_texture_manager(void) {
     }
 }
 
-AbstractTexture* create_texture(const char* alias, const char* path) {
-    size_t index = _texture_count;
+uint32_t create_texture(const char* path) {
+    const uint16_t index = _texture_count;
     AbstractTexture* texture = &_textures[index];
 
-    strncpy(texture->alias, alias, TEXTURE_ALIAS_MAX_LENGTH);
-    strncpy(texture->path, path, TEXTURE_PATH_MAX_LENGTH);
+    ++texture->generation;
+    texture->active = 1;
+    texture->texture = LoadTexture(path);
 
     ++_texture_count;
-    return texture;
+    return ((uint32_t)(texture->generation) << 8) | index;
 }
 
-AbstractTexture* get_texture(const char* alias) {
-    for (size_t i = 0; i < MAX_TEXTURES; ++i) {
-        if (strncmp(alias, _textures[i].alias, TEXTURE_ALIAS_MAX_LENGTH))
-            return &_textures[i];
-    }
+AbstractTexture* get_texture(const uint32_t id) {
+    const uint16_t index = id & 0x00FF;
+    const uint16_t gen = (id & 0xFF00) >> 8;
 
-    return NULL;
+    if (index >= _texture_count) return NULL;
+
+    AbstractTexture* texture = &_textures[index];
+    return texture->generation == gen && texture->active ? texture : NULL;
 }
 
-void free_texture(const char* alias) {
-    AbstractTexture* texture = get_texture(alias);
+void free_texture(const uint32_t id) {
+    AbstractTexture* texture = get_texture(id);
     if (texture == NULL) return;
 
     size_t index = texture - _textures;

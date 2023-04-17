@@ -1,7 +1,6 @@
 #include "entity_manager.h"
 
-#include "../platform/logging.h"
-
+#include <stdio.h>
 #include <string.h>
 
 static Entity _entities[MAX_ENTITIES];
@@ -80,6 +79,11 @@ Entity* get_entity(size_t index) {
     return &_entities[index];
 }
 
+void set_entity_array(Entity* entities, size_t count) {
+    memcpy(_entities, entities, MAX_ENTITIES);
+    _entity_count = count;
+}
+
 void add_component_to_entity(Entity* const entity, Component* const component) {
     for (size_t i = 0; i < ENTITY_COMPONENT_COUNT_MAX; ++i) {
         if (entity->components[i] == NULL) {
@@ -88,6 +92,6 @@ void add_component_to_entity(Entity* const entity, Component* const component) {
         }
     }
 
-    console_log("unable to add component (id: %d) to entity \"%s\"\n", (int)component->type, entity->name);
+    printf("unable to add component (id: %d) to entity \"%s\"\n", (int)component->type, entity->name);
 }
 

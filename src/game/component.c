@@ -1,5 +1,8 @@
 #include "component.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 void* create_component(ComponentType type) {
     Component* to_return = NULL;
 
@@ -35,7 +38,8 @@ void* create_component(ComponentType type) {
         case COMPONENT_sprite:
         {
             SpriteComponent* c = malloc(sizeof(SpriteComponent));
-            c->sprite = NULL;
+            memset(c->path, 0, TEXTURE_PATH_MAX_LENGTH);
+            c->id = 0;
 
             to_return = (Component*)c;
             break;

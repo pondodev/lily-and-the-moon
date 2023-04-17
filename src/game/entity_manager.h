@@ -2,18 +2,10 @@
 #define ENTITY_MANAGER_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
+#include "entity_types.h"
 #include "component.h"
-
-#define MAX_ENTITIES 100 // TODO: tweak to true min value
-#define ENTITY_NAME_CHARS_MAX 16
-#define ENTITY_COMPONENT_COUNT_MAX 50 // TODO: tweak to true min value
-
-typedef struct Entity {
-    int        id;
-    char       name[ENTITY_NAME_CHARS_MAX];
-    Component* components[ENTITY_COMPONENT_COUNT_MAX];
-} Entity;
 
 void init_entity_manager(void);
 Entity* create_entity(const char* name);
@@ -21,6 +13,7 @@ void destroy_entity(int id);
 void destroy_all_entities(void);
 Entity* get_entity_array(size_t* count);
 Entity* get_entity(size_t index);
+void set_entity_array(Entity* entities, size_t count);
 void add_component_to_entity(Entity* const entity, Component* const component);
 
 #endif
