@@ -68,7 +68,7 @@ set_target_properties       (${GAME_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 add_executable              (${PROJECT_NAME} ${PLATFORM_SOURCES})
 
 target_include_directories  (${PROJECT_NAME} PUBLIC ${PROJECT_INCLUDE_DIRS})
-target_link_libraries       (${PROJECT_NAME} PUBLIC ${PROJECT_LIBRARIES} ${GAME_NAME})
+target_link_libraries       (${PROJECT_NAME} PUBLIC ${PROJECT_LIBRARIES})
 target_compile_definitions  (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_DEFINITIONS})
 target_compile_options      (${PROJECT_NAME} PUBLIC ${PROJECT_COMPILE_OPTIONS})
 set_target_properties       (${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)

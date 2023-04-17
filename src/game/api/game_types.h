@@ -16,5 +16,14 @@ typedef struct GameState {
     size_t entity_count;
 } GameState;
 
+typedef struct GameAPI {
+    GameState (*get_game_state)(void);
+    void      (*set_game_state)(GameState state);
+    void      (*init_game)(void);
+    void      (*cleanup_game)(void);
+    void      (*update_game)(void);
+    // TODO: what other functions are needed?
+} GameAPI;
+
 #endif
 

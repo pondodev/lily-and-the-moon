@@ -1,10 +1,10 @@
 #include "app.h"
 
 #include "../helpers.h"
-#include "../game/api/game_interface.h"
+#include "../game/api/game_types.h"
 
 AppContext app_context;
-const GameAPI* api = NULL;
+extern const GameAPI* api;
 
 Texture2D tex;
 
@@ -19,8 +19,6 @@ void init_platform(void) {
         .keymap = get_default_keymap(),
         .exiting = 0,
     };
-
-    api = get_game_api();
 
     tex = LoadTexture("res/test.png");
 }

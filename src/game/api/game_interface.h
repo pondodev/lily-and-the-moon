@@ -7,17 +7,6 @@
 
 #include "game_types.h"
 
-#include <stdlib.h>
-
-typedef struct GameAPI {
-    GameState (*get_game_state)(void);
-    void      (*set_game_state)(GameState state);
-    void      (*init_game)(void);
-    void      (*cleanup_game)(void);
-    void      (*update_game)(void);
-    // TODO: what other functions are needed?
-} GameAPI;
-
 const GameAPI* get_game_api(void);
 
 #endif
