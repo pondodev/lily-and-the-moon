@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static Entity _entities[MAX_ENTITIES];
+static Entity* _entities;
 static size_t _entity_count = 0;
 
 static void clear_entry(size_t index) {
@@ -19,7 +19,11 @@ static void clear_entry(size_t index) {
     }
 }
 
-void init_entity_manager(void) {
+void init_entity_manager(int first_load) {
+    if (! first_load) return;
+
+    _entities = malloc(MAX_ENTITIES * sizeof(Entity));
+
     for (size_t i = 0; i < MAX_ENTITIES; ++i)
     {
         for (size_t j = 0; j < ENTITY_COMPONENT_COUNT_MAX; ++j)
@@ -27,6 +31,15 @@ void init_entity_manager(void) {
 
         clear_entry(i);
     }
+}
+
+void restore_entity_manager(Entity* entities, size_t entity_count) {
+    _entities = entities;
+    _entity_count = entity_count;
+}
+
+void cleanup_entity_manager(void) {
+    free(_entities);
 }
 
 Entity* create_entity(const char* name) {
@@ -77,11 +90,6 @@ Entity* get_entity_array(size_t* count) {
 
 Entity* get_entity(size_t index) {
     return &_entities[index];
-}
-
-void set_entity_array(Entity* entities, size_t count) {
-    memcpy(_entities, entities, MAX_ENTITIES);
-    _entity_count = count;
 }
 
 void add_component_to_entity(Entity* const entity, Component* const component) {

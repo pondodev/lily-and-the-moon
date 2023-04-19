@@ -10,7 +10,7 @@ const uint8_t TARGET_FPS    = 60;
 
 extern const GameAPI* api;
 
-void init(void) { init_platform(); api->init_game(); }
+void init(void) { init_platform(); api->init_game(1); }
 void cleanup(void) { cleanup_platform(); api->cleanup_game(); }
 
 int main(void) {

@@ -5,6 +5,7 @@
 
 #include <dlfcn.h>
 #include <sys/stat.h>
+#include <stdio.h>
 
 // TODO
 #if defined(__APPLE__)
@@ -67,8 +68,10 @@ void init_platform(void) {
 void run_app(void) {
     while (poll_events()) {
         if (is_game_lib_updated()) {
+            printf("detected change in game library! reloading...\n");
             const GameState state = api->get_game_state();
             reload_game_lib();
+            api->init_game(0);
             api->set_game_state(state);
         }
 

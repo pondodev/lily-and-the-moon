@@ -11,12 +11,14 @@ GameState get_game_state(void) {
 }
 
 void set_game_state(GameState state) {
-    set_entity_array(state.entities, state.entity_count);
+    restore_entity_manager(state.entities, state.entity_count);
+    // TODO: set game context
 }
 
-void init_game(void) {
-    init_entity_manager();
+void init_game(int first_load) {
+    init_entity_manager(first_load);
 
+    if (! first_load) return;
     game_context = (GameContext) {
         .player = create_entity("player"),
     };
@@ -52,6 +54,7 @@ void update_game(void) {
 }
 
 void cleanup_game(void) {
-    destroy_all_entities();
+    destroy_all_entities(); // TODO: we only need to call this to free components, handle this in component refactor
+    cleanup_entity_manager();
 }
 

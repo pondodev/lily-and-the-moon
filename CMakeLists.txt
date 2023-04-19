@@ -13,7 +13,7 @@ set_property    (GLOBAL PROPERTY USE_FOLDERS ON)
 set             (CMAKE_BUILD_TYPE Debug)
 set             (CMAKE_C_STANDARD 17)
 
-add_compile_options(-Wall -Wextra -pedantic -g)
+add_compile_options(-Wall -Wextra -pedantic)
 
 #### project files ####
 
